@@ -1,0 +1,482 @@
+{
+  "$schema": "https://tree-sitter.github.io/tree-sitter/assets/schemas/grammar.schema.json",
+  "name": "janet",
+  "word": "_symchars",
+  "rules": {
+    "source_file": {
+      "type": "REPEAT",
+      "content": {
+        "type": "SYMBOL",
+        "name": "value"
+      }
+    },
+    "value": {
+      "type": "SEQ",
+      "members": [
+        {
+          "type": "REPEAT",
+          "content": {
+            "type": "CHOICE",
+            "members": [
+              {
+                "type": "SYMBOL",
+                "name": "_ws"
+              },
+              {
+                "type": "FIELD",
+                "name": "mac",
+                "content": {
+                  "type": "SYMBOL",
+                  "name": "readermac"
+                }
+              }
+            ]
+          }
+        },
+        {
+          "type": "SYMBOL",
+          "name": "_raw_value"
+        },
+        {
+          "type": "REPEAT",
+          "content": {
+            "type": "SYMBOL",
+            "name": "_ws"
+          }
+        }
+      ]
+    },
+    "_raw_value": {
+      "type": "CHOICE",
+      "members": [
+        {
+          "type": "SYMBOL",
+          "name": "comment"
+        },
+        {
+          "type": "SYMBOL",
+          "name": "constant"
+        },
+        {
+          "type": "SYMBOL",
+          "name": "number"
+        },
+        {
+          "type": "SYMBOL",
+          "name": "keyword"
+        },
+        {
+          "type": "SYMBOL",
+          "name": "string"
+        },
+        {
+          "type": "SYMBOL",
+          "name": "buffer"
+        },
+        {
+          "type": "SYMBOL",
+          "name": "parray"
+        },
+        {
+          "type": "SYMBOL",
+          "name": "barray"
+        },
+        {
+          "type": "SYMBOL",
+          "name": "mptuple"
+        },
+        {
+          "type": "SYMBOL",
+          "name": "ptuple"
+        },
+        {
+          "type": "SYMBOL",
+          "name": "btuple"
+        },
+        {
+          "type": "SYMBOL",
+          "name": "struct"
+        },
+        {
+          "type": "SYMBOL",
+          "name": "dict"
+        },
+        {
+          "type": "SYMBOL",
+          "name": "symbol"
+        }
+      ]
+    },
+    "_ws": {
+      "type": "PATTERN",
+      "value": "[ \\t\\r\\f\\n\\v]"
+    },
+    "comment": {
+      "type": "SEQ",
+      "members": [
+        {
+          "type": "STRING",
+          "value": "#"
+        },
+        {
+          "type": "PATTERN",
+          "value": "[^\\n]*"
+        }
+      ]
+    },
+    "constant": {
+      "type": "SEQ",
+      "members": [
+        {
+          "type": "CHOICE",
+          "members": [
+            {
+              "type": "STRING",
+              "value": "nil"
+            },
+            {
+              "type": "STRING",
+              "value": "true"
+            },
+            {
+              "type": "STRING",
+              "value": "false"
+            }
+          ]
+        },
+        {
+          "type": "CHOICE",
+          "members": [
+            {
+              "type": "PATTERN",
+              "value": "[^0-9A-Za-z\\x80-\\xFF!$%&*+-./:<?=>@^_]"
+            },
+            {
+              "type": "BLANK"
+            }
+          ]
+        }
+      ]
+    },
+    "number": {
+      "type": "PATTERN",
+      "value": "[-+]?[0-9]*\\.?[0-9]+([eE][-+]?[0-9]+)?"
+    },
+    "keyword": {
+      "type": "PATTERN",
+      "value": ":[0-9A-Za-z\\x80-\\xFF!$%&*+-./:<?=>@^_]*"
+    },
+    "string": {
+      "type": "SYMBOL",
+      "name": "bytes"
+    },
+    "buffer": {
+      "type": "SEQ",
+      "members": [
+        {
+          "type": "STRING",
+          "value": "@"
+        },
+        {
+          "type": "SYMBOL",
+          "name": "bytes"
+        }
+      ]
+    },
+    "parray": {
+      "type": "SEQ",
+      "members": [
+        {
+          "type": "STRING",
+          "value": "@"
+        },
+        {
+          "type": "SYMBOL",
+          "name": "ptuple"
+        }
+      ]
+    },
+    "barray": {
+      "type": "SEQ",
+      "members": [
+        {
+          "type": "STRING",
+          "value": "@"
+        },
+        {
+          "type": "SYMBOL",
+          "name": "btuple"
+        }
+      ]
+    },
+    "mptuple": {
+      "type": "SEQ",
+      "members": [
+        {
+          "type": "FIELD",
+          "name": "mac",
+          "content": {
+            "type": "REPEAT1",
+            "content": {
+              "type": "SYMBOL",
+              "name": "readermac"
+            }
+          }
+        },
+        {
+          "type": "STRING",
+          "value": "("
+        },
+        {
+          "type": "REPEAT",
+          "content": {
+            "type": "SYMBOL",
+            "name": "value"
+          }
+        },
+        {
+          "type": "STRING",
+          "value": ")"
+        }
+      ]
+    },
+    "ptuple": {
+      "type": "SEQ",
+      "members": [
+        {
+          "type": "STRING",
+          "value": "("
+        },
+        {
+          "type": "FIELD",
+          "name": "exp",
+          "content": {
+            "type": "REPEAT",
+            "content": {
+              "type": "SYMBOL",
+              "name": "value"
+            }
+          }
+        },
+        {
+          "type": "STRING",
+          "value": ")"
+        }
+      ]
+    },
+    "btuple": {
+      "type": "SEQ",
+      "members": [
+        {
+          "type": "STRING",
+          "value": "["
+        },
+        {
+          "type": "REPEAT",
+          "content": {
+            "type": "SYMBOL",
+            "name": "value"
+          }
+        },
+        {
+          "type": "STRING",
+          "value": "]"
+        }
+      ]
+    },
+    "struct": {
+      "type": "SEQ",
+      "members": [
+        {
+          "type": "STRING",
+          "value": "{"
+        },
+        {
+          "type": "REPEAT",
+          "content": {
+            "type": "SEQ",
+            "members": [
+              {
+                "type": "SYMBOL",
+                "name": "value"
+              },
+              {
+                "type": "SYMBOL",
+                "name": "value"
+              }
+            ]
+          }
+        },
+        {
+          "type": "STRING",
+          "value": "}"
+        }
+      ]
+    },
+    "dict": {
+      "type": "SEQ",
+      "members": [
+        {
+          "type": "STRING",
+          "value": "@"
+        },
+        {
+          "type": "SYMBOL",
+          "name": "struct"
+        }
+      ]
+    },
+    "symbol": {
+      "type": "PATTERN",
+      "value": "[0-9A-Za-z\\x80-\\xFF!$%&*+-./:<?=>@^_]+"
+    },
+    "hex": {
+      "type": "PATTERN",
+      "value": "[0-9A-Fa-f]"
+    },
+    "escape": {
+      "type": "SEQ",
+      "members": [
+        {
+          "type": "PATTERN",
+          "value": "\\\\"
+        },
+        {
+          "type": "CHOICE",
+          "members": [
+            {
+              "type": "PATTERN",
+              "value": "[0?\\abefnrtvz]"
+            },
+            {
+              "type": "SEQ",
+              "members": [
+                {
+                  "type": "PATTERN",
+                  "value": "x"
+                },
+                {
+                  "type": "SYMBOL",
+                  "name": "hex"
+                },
+                {
+                  "type": "SYMBOL",
+                  "name": "hex"
+                }
+              ]
+            },
+            {
+              "type": "SEQ",
+              "members": [
+                {
+                  "type": "PATTERN",
+                  "value": "u"
+                },
+                {
+                  "type": "SYMBOL",
+                  "name": "hex"
+                },
+                {
+                  "type": "SYMBOL",
+                  "name": "hex"
+                },
+                {
+                  "type": "SYMBOL",
+                  "name": "hex"
+                },
+                {
+                  "type": "SYMBOL",
+                  "name": "hex"
+                }
+              ]
+            },
+            {
+              "type": "SEQ",
+              "members": [
+                {
+                  "type": "PATTERN",
+                  "value": "U"
+                },
+                {
+                  "type": "SYMBOL",
+                  "name": "hex"
+                },
+                {
+                  "type": "SYMBOL",
+                  "name": "hex"
+                },
+                {
+                  "type": "SYMBOL",
+                  "name": "hex"
+                },
+                {
+                  "type": "SYMBOL",
+                  "name": "hex"
+                },
+                {
+                  "type": "SYMBOL",
+                  "name": "hex"
+                },
+                {
+                  "type": "SYMBOL",
+                  "name": "hex"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "bytes": {
+      "type": "SEQ",
+      "members": [
+        {
+          "type": "STRING",
+          "value": "\""
+        },
+        {
+          "type": "REPEAT",
+          "content": {
+            "type": "CHOICE",
+            "members": [
+              {
+                "type": "SYMBOL",
+                "name": "escape"
+              },
+              {
+                "type": "PATTERN",
+                "value": "[^\"]"
+              }
+            ]
+          }
+        },
+        {
+          "type": "STRING",
+          "value": "\""
+        }
+      ]
+    },
+    "readermac": {
+      "type": "PATTERN",
+      "value": "[';~,|]"
+    },
+    "_symchars": {
+      "type": "PATTERN",
+      "value": "[0-9A-Za-z\\x80-\\xFF!$%&*+-./:<?=>@^_]"
+    }
+  },
+  "extras": [],
+  "conflicts": [
+    [
+      "mptuple",
+      "value"
+    ],
+    [
+      "value"
+    ]
+  ],
+  "precedences": [],
+  "externals": [],
+  "inline": [],
+  "supertypes": []
+}
