@@ -103,9 +103,19 @@
     "type": "mptuple",
     "named": true,
     "fields": {
+      "exp": {
+        "multiple": true,
+        "required": false,
+        "types": [
+          {
+            "type": "value",
+            "named": true
+          }
+        ]
+      },
       "mac": {
         "multiple": true,
-        "required": true,
+        "required": false,
         "types": [
           {
             "type": "readermac",
@@ -119,7 +129,81 @@
       "required": false,
       "types": [
         {
-          "type": "value",
+          "type": "mvalue",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
+    "type": "mvalue",
+    "named": true,
+    "fields": {
+      "mac": {
+        "multiple": true,
+        "required": false,
+        "types": [
+          {
+            "type": "readermac",
+            "named": true
+          }
+        ]
+      }
+    },
+    "children": {
+      "multiple": false,
+      "required": true,
+      "types": [
+        {
+          "type": "barray",
+          "named": true
+        },
+        {
+          "type": "btuple",
+          "named": true
+        },
+        {
+          "type": "buffer",
+          "named": true
+        },
+        {
+          "type": "comment",
+          "named": true
+        },
+        {
+          "type": "constant",
+          "named": true
+        },
+        {
+          "type": "dict",
+          "named": true
+        },
+        {
+          "type": "keyword",
+          "named": true
+        },
+        {
+          "type": "mptuple",
+          "named": true
+        },
+        {
+          "type": "number",
+          "named": true
+        },
+        {
+          "type": "parray",
+          "named": true
+        },
+        {
+          "type": "string",
+          "named": true
+        },
+        {
+          "type": "struct",
+          "named": true
+        },
+        {
+          "type": "symbol",
           "named": true
         }
       ]

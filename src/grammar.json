@@ -46,6 +46,42 @@
         }
       ]
     },
+    "mvalue": {
+      "type": "SEQ",
+      "members": [
+        {
+          "type": "REPEAT",
+          "content": {
+            "type": "CHOICE",
+            "members": [
+              {
+                "type": "SYMBOL",
+                "name": "_ws"
+              },
+              {
+                "type": "FIELD",
+                "name": "mac",
+                "content": {
+                  "type": "SYMBOL",
+                  "name": "readermac"
+                }
+              }
+            ]
+          }
+        },
+        {
+          "type": "SYMBOL",
+          "name": "_mraw_value"
+        },
+        {
+          "type": "REPEAT",
+          "content": {
+            "type": "SYMBOL",
+            "name": "_ws"
+          }
+        }
+      ]
+    },
     "_raw_value": {
       "type": "CHOICE",
       "members": [
@@ -88,6 +124,72 @@
         {
           "type": "SYMBOL",
           "name": "ptuple"
+        },
+        {
+          "type": "SYMBOL",
+          "name": "btuple"
+        },
+        {
+          "type": "SYMBOL",
+          "name": "struct"
+        },
+        {
+          "type": "SYMBOL",
+          "name": "dict"
+        },
+        {
+          "type": "SYMBOL",
+          "name": "symbol"
+        }
+      ]
+    },
+    "_mraw_value": {
+      "type": "CHOICE",
+      "members": [
+        {
+          "type": "SYMBOL",
+          "name": "comment"
+        },
+        {
+          "type": "SYMBOL",
+          "name": "constant"
+        },
+        {
+          "type": "SYMBOL",
+          "name": "number"
+        },
+        {
+          "type": "SYMBOL",
+          "name": "keyword"
+        },
+        {
+          "type": "SYMBOL",
+          "name": "string"
+        },
+        {
+          "type": "SYMBOL",
+          "name": "buffer"
+        },
+        {
+          "type": "SYMBOL",
+          "name": "parray"
+        },
+        {
+          "type": "SYMBOL",
+          "name": "barray"
+        },
+        {
+          "type": "SYMBOL",
+          "name": "mptuple"
+        },
+        {
+          "type": "ALIAS",
+          "content": {
+            "type": "SYMBOL",
+            "name": "ptuple"
+          },
+          "named": true,
+          "value": "mptuple"
         },
         {
           "type": "SYMBOL",
@@ -231,7 +333,7 @@
           "type": "REPEAT",
           "content": {
             "type": "SYMBOL",
-            "name": "value"
+            "name": "mvalue"
           }
         },
         {
@@ -473,6 +575,9 @@
     ],
     [
       "value"
+    ],
+    [
+      "mvalue"
     ]
   ],
   "precedences": [],

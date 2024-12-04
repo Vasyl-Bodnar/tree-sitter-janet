@@ -12,15 +12,18 @@ module.exports = grammar({
 
   extras: $ => [],
 
-  conflicts: $ => [[$.mptuple, $.value], [$.value]],
+  conflicts: $ => [[$.mptuple, $.value], [$.value], [$.mvalue]],
 
   word: $ => $._symchars,
 
   rules: {
     source_file: $ => repeat($.value),
     value: $ => seq(repeat(choice($._ws, field("mac", $.readermac))), $._raw_value, repeat($._ws)), // prec
+    mvalue: $ => seq(repeat(choice($._ws, field("mac", $.readermac))), $._mraw_value, repeat($._ws)), // prec
     _raw_value: $ => choice($.comment, $.constant, $.number, $.keyword, $.string, $.buffer, /*snip*/ 
                             $.parray, $.barray, $.mptuple, $.ptuple, $.btuple, $.struct, $.dict, $.symbol), // $.long_string, $.long_buffer
+    _mraw_value: $ => choice($.comment, $.constant, $.number, $.keyword, $.string, $.buffer, /*snip*/ 
+                            $.parray, $.barray, $.mptuple, alias($.ptuple, $.mptuple), $.btuple, $.struct, $.dict, $.symbol), // $.long_string, $.long_buffer
     _ws: $ => /[ \t\r\f\n\v]/,
     comment: $ => seq("#", /[^\n]*/),
     constant: $ => seq(choice("nil", "true", "false"), optional(/[^0-9A-Za-z\x80-\xFF!$%&*+-./:<?=>@^_]/)),
@@ -33,7 +36,7 @@ module.exports = grammar({
     // long_buffer: $ => seq("@", $.long_bytes),
     parray: $ => seq("@", $.ptuple),
     barray: $ => seq("@", $.btuple),
-    mptuple: $ => seq(field("mac", repeat1($.readermac)), "(", repeat($.value), ")"),
+    mptuple: $ => seq(field("mac", repeat1($.readermac)), "(", repeat($.mvalue), ")"),
     ptuple: $ => seq("(", field("exp", repeat($.value)), ")"),
     btuple: $ => seq("[", repeat($.value), "]"),
     struct: $ => seq("{", repeat(seq($.value, $.value)), "}"),
